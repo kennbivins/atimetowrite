@@ -72,6 +72,41 @@ document.getElementById('share-linkedin')?.addEventListener('click', function(e)
     window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrl, 'linkedin-share', 'width=580,height=400');
 });
 
+// ==========================
+// Dynamic Gallery
+// ==========================
+// Add images to images/gallery/ named: gallery-1.jpg, gallery-2.jpg, etc.
+// Change GALLERY_COUNT to match how many images you have (4, 8, 16, etc.)
+const GALLERY_CONFIG = {
+    folder: 'images/gallery/',
+    count: 8,
+    extension: 'jpg',
+    alts: []  // optional: ['Writing', 'Community', 'Students', 'Book'] for custom alt text
+};
+
+function buildGallery() {
+    const grid = document.getElementById('gallery-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+    for (let i = 1; i <= GALLERY_CONFIG.count; i++) {
+        const filename = `gallery-${i}.${GALLERY_CONFIG.extension}`;
+        const src = GALLERY_CONFIG.folder + filename;
+        const alt = (GALLERY_CONFIG.alts && GALLERY_CONFIG.alts[i - 1]) || `Gallery image ${i}`;
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.onclick = function() { openLightbox(this); };
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = alt;
+        img.loading = 'lazy';
+        item.appendChild(img);
+        grid.appendChild(item);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', buildGallery);
+
 // Lightbox Functions
 function openLightbox(element) {
     const lightbox = document.getElementById("lightbox");
